@@ -9,7 +9,6 @@ class Student:
     """
     A student class as base for method testing
     """
-
     def __init__(self, first_name, last_name):
         """
         As we want these to be read-only fields, we can prepend the first_name
@@ -19,7 +18,7 @@ class Student:
         self._first_name = first_name
         self._last_name = last_name
         self._start_date = date.today()
-        self.end_date = date.today + timedelta(days=365)
+        self.end_date = date.today() + timedelta(days=365)
         self.naughty_list = False
 
     @property
