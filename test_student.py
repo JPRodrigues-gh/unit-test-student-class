@@ -1,7 +1,8 @@
 """ Student test file """
 import unittest
+from unittest.mock import patch
 from datetime import timedelta
-# from leap_year import GetLeapYear
+# from leap_year import GetLeapYearfor
 from student import Student
 
 
@@ -21,32 +22,32 @@ class TestStudent(unittest.TestCase):
     #
     # Use the setUpClass method to run code once at the beginning of our tests
     # For example, we may want to do this to populate a test database with data
-    @classmethod
-    def setUpClass(cls):
-        print('setUpClass')
+    # @classmethod
+    # def setUpClass(cls):
+    #     print('setUpClass')
 
     # use the tearDownClass method to run code once at the end of our tests
     # For example, to destroy a test database
-    @classmethod
-    def tearDownClass(cls):
-        print('tearDownClass')
+    # @classmethod
+    # def tearDownClass(cls):
+    #     print('tearDownClass')
 
     # setUp method gets called before each test method
     # Use setUp method to instantiate the Student class once
     # instead of in each test method
     def setUp(self):
-        print('setUp')
+        # print('setUp')
         self.student = Student('John', 'Doe')
 
     # tearDown method gets called after each test method
-    def tearDown(self):
-        print('tearDown')
+    # def tearDown(self):
+        # print('tearDown')
 
     def test_full_name(self):
         """ Test full_name function that will return a students full name """
         # Instance of student class
         # student = Student('John', 'Doe')
-        print('test_full_name')
+        # print('test_full_name')
 
         # an assertEqual on the student instance to see whether
         # calling the full_name method on it returns the expected value
@@ -61,7 +62,7 @@ class TestStudent(unittest.TestCase):
         """
         # Instance of student class
         # student = Student('John', 'Doe')
-        print('test_alert_santa')
+        # print('test_alert_santa')
 
         # student instance created, call the alert_santa method on it
         self.student.alert_santa()
@@ -80,7 +81,7 @@ class TestStudent(unittest.TestCase):
         """
         # Instance of student class
         # student = Student('John', 'Doe')
-        print('test_email')
+        # print('test_email')
 
         # an assertEqual on the student instance to see whether
         # calling the email method on it returns the expected value
@@ -95,15 +96,32 @@ class TestStudent(unittest.TestCase):
         """
         # Instance of student class
         # student = Student('John', 'Doe')
-        print('test_apply_extension')
+        # print('test_apply_extension')
         old_end_date = self.student.end_date
-        print(old_end_date)
+        # print(old_end_date)
         self.student.apply_extension(5)
 
         # an assertEqual on the student instance to see whether
         # calling the email method on it returns the expected value
         self.assertEqual(self.student.end_date, old_end_date + timedelta
                          (days=5))
+
+    def test_course_schedule_success(self):
+        """ test course_schedule function for success"""
+        with patch("student.requests.get") as mocked_get:
+            mocked_get.return_value.ok = True
+            mocked_get.return_value.text = "Success"
+
+            schedule = self.student.course_schedule()
+            self.assertEqual(schedule, "Success")
+
+    def test_course_schedule_failed(self):
+        """ test course_schedule function for failure"""
+        with patch("student.requests.get") as mocked_get:
+            mocked_get.return_value.ok = False
+
+            schedule = self.student.course_schedule()
+            self.assertEqual(schedule, "Something went wrong with the request!")
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ Test Driven Development with the student class
 """
 from datetime import date, timedelta
 from calendar import isleap
+import requests
 # from leap_year import GetLeapYear
 
 # print(GetLeapYear(date.today().year))
@@ -57,8 +58,19 @@ class Student:
         Since this is a method to get data only, I’ll add the @property
          decorator to our full_name method.
         """
-        return f"{self._first_name.lower()}.{self._last_name.lower()}@email.com"
+        email_name = f"{self._first_name.lower()}.{self._last_name.lower()}"
+        return f"{email_name}@email.com"
 
     def apply_extension(self, days):
         """ Set new end date adding extension days """
         self.end_date = self.end_date + timedelta(days=days)
+
+    def course_schedule(self):
+        """ mock fetch course schedule"""
+        lfn = f"{self._last_name}/{self._first_name}"
+        response = requests.get(f"http://company.com/course-schedule/{lfn}")
+
+        if response.ok:
+            return response.text
+        else:
+            return "Something went wrong with the request!"
