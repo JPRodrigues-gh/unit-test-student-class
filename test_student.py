@@ -1,5 +1,7 @@
 """ Student test file """
 import unittest
+from datetime import timedelta
+# from leap_year import GetLeapYear
 from student import Student
 
 
@@ -13,13 +15,42 @@ class TestStudent(unittest.TestCase):
      assert whether it returned the first_name and last_name property
      values separated by a space
     """
+    # adding the @classmethod decorator to a method and passing ‘cls’ as a
+    # method parameter will make it a class method which acts on the class
+    # instead of an instance of the class
+    #
+    # Use the setUpClass method to run code once at the beginning of our tests
+    # For example, we may want to do this to populate a test database with data
+    @classmethod
+    def setUpClass(cls):
+        print('setUpClass')
+
+    # use the tearDownClass method to run code once at the end of our tests
+    # For example, to destroy a test database
+    @classmethod
+    def tearDownClass(cls):
+        print('tearDownClass')
+
+    # setUp method gets called before each test method
+    # Use setUp method to instantiate the Student class once
+    # instead of in each test method
+    def setUp(self):
+        print('setUp')
+        self.student = Student('John', 'Doe')
+
+    # tearDown method gets called after each test method
+    def tearDown(self):
+        print('tearDown')
+
     def test_full_name(self):
-        """ Instance of student class """
-        student = Student('John', 'Doe')
+        """ Test full_name function that will return a students full name """
+        # Instance of student class
+        # student = Student('John', 'Doe')
+        print('test_full_name')
 
         # an assertEqual on the student instance to see whether
         # calling the full_name method on it returns the expected value
-        self.assertEqual(student.full_name, 'John Doe')
+        self.assertEqual(self.student.full_name, 'John Doe')
 
     def test_alert_santa(self):
         """
@@ -29,17 +60,50 @@ class TestStudent(unittest.TestCase):
          his naughty list.
         """
         # Instance of student class
-        student = Student('John', 'Doe')
+        # student = Student('John', 'Doe')
+        print('test_alert_santa')
 
         # student instance created, call the alert_santa method on it
-        student.alert_santa()
+        self.student.alert_santa()
 
         # Use assertTrue because we know that we want the alert_santa method
         #  to set the value of the naughty_list property to True when called
         # Note. we don’t pass a second argument to assertTrue as it’s not
         #  comparing two values but simply checking whether an expression or
         #  value is True
-        self.assertTrue(student.naughty_list)
+        self.assertTrue(self.student.naughty_list)
+
+    def test_email(self):
+        """
+        Assert whether email method returns expected email address output of
+         _first_name dot _last_name@email.com
+        """
+        # Instance of student class
+        # student = Student('John', 'Doe')
+        print('test_email')
+
+        # an assertEqual on the student instance to see whether
+        # calling the email method on it returns the expected value
+        self.assertEqual(self.student.email, 'john.doe@email.com')
+        # self.assertEqual(student.email,
+        #              '{student._first_name}.{student._last_name}@email.com')
+
+    def test_apply_extension(self):
+        """
+        Assert whether student’s end_date is equal to the old date plus
+         a timedelta of five days
+        """
+        # Instance of student class
+        # student = Student('John', 'Doe')
+        print('test_apply_extension')
+        old_end_date = self.student.end_date
+        print(old_end_date)
+        self.student.apply_extension(5)
+
+        # an assertEqual on the student instance to see whether
+        # calling the email method on it returns the expected value
+        self.assertEqual(self.student.end_date, old_end_date + timedelta
+                         (days=5))
 
 
 if __name__ == "__main__":
